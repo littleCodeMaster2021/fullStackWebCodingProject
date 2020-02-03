@@ -1,4 +1,4 @@
-# Coding Project from Singularity Systems Inc.<br/>
+# Coding Project from a Company.<br/>
 
 ## To run the application locally: <br/>
 * Type yarn start at terminal <br/>
