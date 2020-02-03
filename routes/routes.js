@@ -278,6 +278,34 @@ router.get('/updateProfile', (req, res) => {
   res.sendFile(path.join(__dirname, '../', 'views', 'userUpdateInfo.html'));
 });
 
+router.post('/submitEmail',  (req, res) => {
+  const user = req.body.userEmail;
+      try {
+        MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/photoShare', {
+          useUnifiedTopology: true,
+          useNewUrlParser: true,
+        }, (err, db) => {
+          if (err) {
+            console.log('Unable to connect db');
+            res.status(404).json({ error: err.message });
+          } else {
+            console.log('Connection established');
+            const data = db.db('photoShare').collection('userInfo');
+            data.find({ name: user }).toArray((err, items) => {
+              if (err) {
+                res.status(404).json({ error: err.message });
+              } else {
+                res.status(200).json(items);
+                db.close();
+              }
+            });
+          }
+        });
+      } catch (e) {
+        // console.log(e);
+      }
+});
+
 router.get('/updateProfile/:email', checkToken, (req, res) => {
   const user = req.params.email;
   jwt.verify(req.token, 'this_is_a_secret', (err, authorizedData) => {
@@ -316,6 +344,7 @@ router.get('/updateProfile/:email', checkToken, (req, res) => {
   });
 });
 
+
 router.post('/changePassword/:email', checkToken, (req, res) => {
   jwt.verify(req.token, 'this_is_a_secret', (err, authorizedData) => {
     if (err) {
@@ -353,54 +382,54 @@ router.post('/changePassword/:email', checkToken, (req, res) => {
   });
 });
 
-router.post('/changeUsername', checkToken, (req, res) => {
-  jwt.verify(req.token, 'this_is_a_secret', (err, authorizedData) => {
-    if (err) {
-      res.status(403).json('unauthorized');
-    } else if (req.loginUser !== req.body.oldUserName) {
-      res.status(403).json('unauthorized');
-    } else if (req.loginUser === req.body.oldUserName) {
-      const user = req.body.oldUserName;
-      try {
-        MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/photoShare', {
-          useUnifiedTopology: true,
-          useNewUrlParser: true,
-        }, (err, db) => {
-          if (err) {
-            res.status(400).json({ error: err.message });
-          } else {
-            db.db('photoShare').collection('userInfo').updateOne(
-              { email: user },
-              { $set: { email: req.body.newUsername } },
-              (err, post) => {
-                if (err) {
-                  res.status(404).send({ error: err.message });
-                } else {
-                  res.status(200).send('edit user name');
-                  db.close();
-                }
-              },
-            );
-            db.db('photoShare').collection('userFile').updateOne(
-              { email: user },
-              { $set: { email: req.body.newUsername } },
-              (err, post) => {
-                if (err) {
-                  res.status(404).send({ error: err.message });
-                } else {
-                  res.status(200).send('edit user name');
-                  db.close();
-                }
-              },
-            );
-          }
-        });
-      } catch (e) {
-      // console.log(e);
-      }
-    }
-  });
-});
+// router.post('/changeUsername', checkToken, (req, res) => {
+//   jwt.verify(req.token, 'this_is_a_secret', (err, authorizedData) => {
+//     if (err) {
+//       res.status(403).json('unauthorized');
+//     } else if (req.loginUser !== req.body.oldUserName) {
+//       res.status(403).json('unauthorized');
+//     } else if (req.loginUser === req.body.oldUserName) {
+//       const user = req.body.oldUserName;
+//       try {
+//         MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/photoShare', {
+//           useUnifiedTopology: true,
+//           useNewUrlParser: true,
+//         }, (err, db) => {
+//           if (err) {
+//             res.status(400).json({ error: err.message });
+//           } else {
+//             db.db('photoShare').collection('userInfo').updateOne(
+//               { email: user },
+//               { $set: { email: req.body.newUsername } },
+//               (err, post) => {
+//                 if (err) {
+//                   res.status(404).send({ error: err.message });
+//                 } else {
+//                   res.status(200).send('edit user name');
+//                   db.close();
+//                 }
+//               },
+//             );
+//             db.db('photoShare').collection('userFile').updateOne(
+//               { email: user },
+//               { $set: { email: req.body.newUsername } },
+//               (err, post) => {
+//                 if (err) {
+//                   res.status(404).send({ error: err.message });
+//                 } else {
+//                   res.status(200).send('edit user name');
+//                   db.close();
+//                 }
+//               },
+//             );
+//           }
+//         });
+//       } catch (e) {
+//       // console.log(e);
+//       }
+//     }
+//   });
+// });
 
 router.post('/updateProfile/:email', checkToken, (req, res) => {
   jwt.verify(req.token, 'this_is_a_secret', (err, authorizedData) => {

@@ -11,90 +11,36 @@ app.controller('resetPasswordController', function ($scope, $http, $window) {
   $scope.returnBack = async function () {
     window.location.assign('/index');
   };
+  $scope.findUserName = '';
+
+  $scope.submitEmail = async function(){
+    $scope.userEmail= document.getElementById('userEmail').value;
+    if ($scope.userEmail !== '') {
+      const userEmail = $scope.userEmail;
+      const req = $http({
+        url: '/submitEmail',
+        method: 'POST',
+        data: {
+          userEmail
+        },
+      });
+      req.then((response) => {
+        const data = response.data[0];
+        if (data !== undefined){
+        $scope.findUserName = data.email.concat(' as your user name!');
+        }else{
+          $scope.findUserName = 'no user associated with this email. Please register an account first!';
+        }
+      });
+    }else{
+      if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($scope.userEmail))){
+        window.alert('Please enter a valid email address!');
+      }else{
+        window.alert('Please enter an email address!');
+      }
+    }
+  }
 });
-//   $scope.onExit = function () {
-//     $http.get('/session/destroy').then((res) => {
-//       window.location.href = '/index';
-//     });
-//   };
-//   // $window.onbeforeunload =  $scope.onExit;
-
-//   // Get user id from URL
-//   const url = window.location.search;
-//   // // console.log(url);
-//   $scope.email = url.substring(1).split('?')[0];
-//   // Set Some redirect functions
-//   $scope.getUpdateInfoPage = function () {
-//     return `/updateProfile?${$scope.email}`;
-//   };
-
-//   $scope.changeImgToURL = function (postid) {
-//     const filesSelected = document.getElementById(postid).files;
-//     if (filesSelected.length > 0) {
-//       const fileToLoad = filesSelected[0];
-//       const fileReader = new FileReader();
-//       fileReader.onload = function (fileLoadedEvent) {
-//         $scope.imageSrcNew = fileLoadedEvent.target.result;
-//         // console.log('1', $scope.imageSrcNew);
-//         if ($scope.imageSrcNew !== undefined) {
-//           const newpostid = postid.slice(1);
-//           document.getElementById('3'.concat(newpostid)).src = $scope.imageSrcNew;
-//           $scope.imageSrcNew = $scope.imageSrcNew.split(',')[1];
-//           // // console.log($scope.imageSrcNew);
-//           const corrPostID = newpostid;
-//           const request1 = $http({
-//             url: `/editImage/${corrPostID}`,
-//             method: 'POST',
-//             data: {
-//               imageSrcNew: $scope.imageSrcNew,
-//             },
-//           });
-//           request1.then(() => {
-//             // console.log('success in changing');
-//           },
-//           (err) => {
-//             throw new Error(`reject sending image data: ${err}`);
-//           });
-//         }
-//       };
-//       fileReader.readAsDataURL(fileToLoad);
-//     }
-//   };
-
-//   $scope.changePicture = async function (postid) {
-//     const imgRoot = document.getElementById(postid);
-//     const input = document.createElement('input');
-//     input.setAttribute('id', '6'.concat(postid));
-//     input.setAttribute('type', 'file');
-//     input.setAttribute('class', 'text-center center-block file-upload');
-//     input.setAttribute('onchange', 'angular.element(this).scope().changeImgToURL(this.id)');
-//     imgRoot.appendChild(input);
-//   };
-
-//   /**
-//    * Sign out logic:
-//    * Clear all the cookies as well as the session.
-//    * */
-//   $scope.signOut = function () {
-//     const request = $http({
-//       url: '/signOut',
-//       method: 'GET',
-//       params: {
-//         user: $scope.email,
-//       },
-//     });
-//     request.then((res) => {
-//       if (res.status === 200) {
-//         window.location.href = '/index';
-//       }
-//     });
-//   };
-
-//   $scope.curPage = 1;
-//   $scope.itemsPerPage = 3;
-//   $scope.maxSize = 5;
-// });
-
 
 app.controller('registerController', function ($scope, $http) {
   $scope.passwordStrength = {
@@ -122,7 +68,6 @@ app.controller('registerController', function ($scope, $http) {
   };
   $scope.register = async function () {
     // console.log(`Test ${$scope.email}`);
-
     const request = $http({
       url: '/register',
       method: 'POST',
