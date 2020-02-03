@@ -1,0 +1,405 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a API documentation for web based project",
+    "version": "1.0.0",
+    "title": "Swagger API documentation for web based project",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "shuaiz@seas.upenn.edu"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3000",
+  "tags": [
+    {
+      "name": "User Profile",
+      "description": "Operations about creating and updating user's Profile",
+      "externalDocs": {
+        "description": "Account management",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "Account management",
+      "description": "Operations about user's account",
+      "externalDocs": {
+        "description": "Account management",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Account management"
+        ],
+        "summary": "Create new account",
+        "description": "New user creats user account",
+        "operationId": "register",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "operation success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserFile"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/signIn": {
+      "post": {
+        "tags": [
+          "Account management"
+        ],
+        "summary": "Sign into account",
+        "description": "Sign into a created account",
+        "operationId": "signIn",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Account management"
+        ],
+        "summary": "Goto homepage Page",
+        "description": "Jump to homepage page for signin",
+        "operationId": "GotosignIn",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/specificUsers/{username}": {
+      "get": {
+        "tags": [
+          "Account management"
+        ],
+        "summary": "Get specific user account information by (userid) username",
+        "description": "Find specific user account information by (userid) username",
+        "operationId": "GetUserAccountInfor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "description": "Find specific user account information by (userid) user name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Jump to userProfile Page",
+        "description": "This endpoints use a get request to go to userProfile.html",
+        "operationId": "gotoProfile",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "operation success"
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/updateProfile": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Jump to update user Profile Page",
+        "description": "This endpoints use a get request to go to updateProfile.html",
+        "operationId": "gotoUpdateProfile",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "operation success"
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/updateProfile/{user name}": {
+      "get": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Get Updated profile information",
+        "description": "Get Update profile information",
+        "operationId": "GetupdateProfilePost",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user name",
+            "description": "This endpoints use a get request to update user profile post to backend",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "operation success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserFile"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User Profile"
+        ],
+        "summary": "Update user profile information",
+        "description": "Update user profile information",
+        "operationId": "PostupdateProfilePost",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user name",
+            "description": "This endpoints use a put request to update user profile post to backend",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "in": "body",
+            "name": "request body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserFile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "403": {
+            "description": "Forbidden: The client does not have access rights to the content"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "UserFile": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "format": "string"
+        },
+        "birth": {
+          "type": "string",
+          "format": "string"
+        },
+        "gender": {
+          "type": "string",
+          "format": "string"
+        },
+        "marriage": {
+          "type": "string",
+          "format": "string"
+        },
+        "country": {
+          "type": "string",
+          "format": "string"
+        },
+        "state": {
+          "type": "string",
+          "format": "string"
+        },
+        "area": {
+          "type": "string",
+          "format": "string"
+        },
+        "street": {
+          "type": "string",
+          "format": "string"
+        },
+        "phone": {
+          "type": "string",
+          "format": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "string"
+        },
+        "occupation": {
+          "type": "string",
+          "format": "string"
+        },
+        "college": {
+          "type": "string",
+          "format": "string"
+        },
+        "generalInformation": {
+          "type": "string",
+          "format": "string"
+        },
+        "imageSrc": {
+          "type": "string",
+          "format": "string"
+        }
+      }
+    },
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
